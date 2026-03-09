@@ -1,7 +1,101 @@
+
 body {
-  font-family: sans-serif;
-  color: #666;
-  background-color: #f1f1f1;
+  background: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+
+h1 {
+  padding-left: 5%;
+  margin-top: 4%;
+  font-size:xxx-large;
+}
+
+.account-tab {
+  position: absolute;
+  top: 1%;
+  right: 10%;
   font-size: x-large;
-  margin: 1em;
+  color: white;
+  border: 2px;
+  border-radius: 5px;
+  border-color: white;
+  text-decoration: none;
+
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 40px;
+  list-style-type: none;
+}
+
+.row::-webkit-scrollbar {
+  display: none;
+}
+
+.posterimg {
+  width: 150px;
+  height: 225px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background-color: #333;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 80px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+
+.btn {
+  background: rgba(165, 165, 165, 0.6);
+  color:white;
+}
+
+.scroll-left { left: 10px; }
+.scroll-right { right: 10px; }
+
+.viewimg {
+  width: 300px;
+  height: 450px;
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  background-color: #333;
+}
+
+.infowindow {
+  padding-left: 5%;
+  padding-top: 5%;
+}
+
+#whitetext {
+  color: white !important;
+  decoration: none;
+  text-decoration: none;
 }

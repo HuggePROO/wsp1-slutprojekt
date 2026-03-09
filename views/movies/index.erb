@@ -1,0 +1,30 @@
+<link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
+
+
+
+<div class="container">
+    <button class="scroll-btn scroll-left" onclick="scrollPosters(-1)">&#10094;</button>
+
+    <ul class="row" id="posterRow">
+      <% @movies.each do |movie| %>
+        <li>
+          <a href="/movies/<%= movie['id'] %>">
+            <img class="posterimg" src="<%= movie['poster'] %>" alt="<%= movie['name'] %>">
+          </a>
+        </li>
+      <% end %>
+    </ul>
+
+    <button class="scroll-btn scroll-right" onclick="scrollPosters(1)">&#10095;</button>
+</div>
+
+<a class="btn" href="/movies/new">Add Movie</a>
+
+<script>
+  function scrollPosters(direction) {
+    const row = document.getElementById('posterRow');
+    const scrollAmount = 300 * direction;
+    row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+</script>
+

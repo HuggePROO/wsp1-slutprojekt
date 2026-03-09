@@ -1,0 +1,17 @@
+
+<link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
+
+<img class="viewimg" src="<%= @movie['poster'] %>" alt="<%= @movie['name'] %>">
+<div class="infowindow">
+    <h2>More Info About: <%= @movie['name'].capitalize %></h2>
+
+    <p><em>Runtime: </em> <%=@movie['runtime'] %></p>
+    <p><em>IMDb-Score: </em> <%= @movie['imdb'] %></p>
+    
+        <a href="/movies/<%= @movie['id']%>/edit">
+            <h3 id="whitetext">Edit Movie</h3>
+        </a>
+        <a href="../movies">
+            <h3 id="whitetext">Back</h3>
+        </a>
+</div>

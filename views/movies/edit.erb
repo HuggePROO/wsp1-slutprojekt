@@ -1,0 +1,14 @@
+<h2>Edit movie</h2>
+
+
+<form action="/movies/<%=@movie["id"]%>/update" method="post">
+	<label>Movie <input type="text" name="movie_name" value="<%=@movie['name']%>"></label>
+    <label>Poster URL <input type="text" name="movie_poster" value="<%=@movie['poster']%>"></label>
+	<label>Runtime <input type="text" name="movie_runtime" value="<%=@movie['runtime']%>%"></label>
+	<label> IMDb-Score <input type="text" name="movie_imdb" value="<%=@movie['imdb']%>"></label>
+	<input type="submit" value="Submit">
+</form>
+
+<form class="delete" action="/movies/<%= @movie["id"]%>/delete" method="post">
+    <input type="submit" value="Delete">
+</form>

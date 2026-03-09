@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROFlix</title>
+    <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
+</head>
+  
+<body>
+
+<h1>PROFlix</h1>
+
+<% if @current_user %>
+    <li class="account-tab"> 
+      <form class="delete" action="/logout" method="post">
+        <input type="submit" value="Logga ut">
+      </form>
+    </li>
+<% else %>
+  <ul class="account-tab">
+    <ul><a href="/login" id="whitetext">Log In</a></ul>
+    <ul><a href="/users/new" id="whitetext">Sign Up</a></ul>
+  </ul>
+<% end %>
+
+<%= yield %>
+
+</body>
+</html>
