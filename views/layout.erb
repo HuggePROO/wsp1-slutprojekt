@@ -11,12 +11,11 @@
 
 <h1>PROFlix</h1>
 
+
 <% if @current_user %>
-    <li class="account-tab"> 
-      <form class="delete" action="/logout" method="post">
-        <input type="submit" value="Logga ut">
-      </form>
-    </li>
+    <ul class="account-tab"> 
+      <ul><a href="/userpage" id="whitetext">My Profile</a></ul>
+    </ul>
 <% else %>
   <ul class="account-tab">
     <ul><a href="/login" id="whitetext">Log In</a></ul>
