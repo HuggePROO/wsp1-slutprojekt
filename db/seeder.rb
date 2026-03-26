@@ -16,7 +16,7 @@ class Seeder
   end
 
   def self.drop_tables
-    db.execute('DROP TABLE IF EXISTS saves')
+    db.execute('DROP TABLE IF EXISTS user_movies')
     db.execute('DROP TABLE IF EXISTS users')
     db.execute('DROP TABLE IF EXISTS movies')
   end
@@ -36,7 +36,7 @@ class Seeder
       password TEXT NOT NULL
     )')
 
-    db.execute('CREATE TABLE saves (
+    db.execute('CREATE TABLE user_movies (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
       movie_id INTEGER,

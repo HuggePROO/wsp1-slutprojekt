@@ -16,7 +16,7 @@ class App < Sinatra::Base
 
   configure do
     enable :sessions
-    set :session_secret, "static_key_123"
+    set :session_secret, SecureRandom.hex(64)
   end
 
   before do
@@ -58,6 +58,12 @@ class App < Sinatra::Base
   get '/movies/:id' do | id |
     @movie = db.execute('SELECT * FROM movies WHERE id=?',id).first
     erb(:"movies/show")
+
+    # är lite fuckad
+    #  @user_movie = db.execute(
+    #"SELECT * FROM user_movies WHERE user_id = ? AND movie_id = ?",
+    #[session[:user_id], id]
+).first
   end
 
   post '/movies/:id/delete' do | id |
@@ -92,11 +98,11 @@ class App < Sinatra::Base
             WHERE username = ?",
             request_username).first
 
-  unless user
+    unless user
       ap "/login : Invalid username."
       status 401
       redirect '/acces_denied'
-  end
+    end
 
     db_id = user["id"].to_i
     db_password_hashed = user["password"].to_s
@@ -113,46 +119,46 @@ class App < Sinatra::Base
       status 401
       redirect '/acces_denied'
     end
-  
+  end
 
-    post '/logout' do
-      ap "Logging out"
-      session.clear
-      redirect '/'
-    end
+  post '/logout' do
+    ap "Logging out"
+    session.clear
+    redirect '/'
+  end
 
-    get '/users/new' do
-      erb(:"movies/users/new")
-    end
+  get '/users/new' do
+    erb(:"movies/users/new")
+  end
 
-    post '/users' do
-      username = params[:username]
-      password = params[:password]
-      password_hash = BCrypt::Password.create(password)
-      stored_password = BCrypt::Password.new(user["password"])
-      db.execute("INSERT INTO users (username, password) VALUES (?, ?)", [username, password_hash])
-      redirect '/login'
+  post '/users' do
+    username = params[:username]
+    password = params[:password]
+    password_hash = BCrypt::Password.create(password)
+    stored_password = BCrypt::Password.new(user["password"])
+    db.execute("INSERT INTO users (username, password) VALUES (?, ?)", [username, password_hash])
+    redirect '/login'
     unless stored_password == request_plain_password
       redirect '/acces_denied'
     end
+  end
 
 
 
-
-  post '/saves' do
+  post '/user_movies' do
     user_id = session[:user_id]
     movie_id = params[:movie_id]
     status = params[:status]
     rating = params[:rating]
 
-    db.execute("INSERT INTO saves (user_id, movie_id, status, rating) VALUES (?, ?, ?, ?)", [user_id, movie_id, status, rating])
+    db.execute("INSERT INTO user_movies (user_id, movie_id, status, rating) VALUES (?, ?, ?, ?)", [user_id, movie_id, status, rating])
 
     redirect "/movies/#{movie_id}"
   end
 
-  get '/users/userpage' do
+  get '/movies/users/view' do
     user_id = session[:user_id]
-
+    
     # Watched movies
     @watched = db.execute("
       SELECT movies.*
@@ -171,7 +177,10 @@ class App < Sinatra::Base
       AND user_movies.status = 'to-watch'
     ", user_id)
 
-    erb :"movies/userpage"
+    erb :"/movies/users/show"
   end
 
 end
+
+
+# kolla line 62

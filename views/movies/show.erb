@@ -15,3 +15,27 @@
             <h3 id="whitetext">Back</h3>
         </a>
 </div>
+
+<% if @current_user %>
+<form action="/user_movies" method="POST">
+  <input type="hidden" name="movie_id" value="<%= @movie['id'] %>">
+  <input type="hidden" name="status" value="to-watch">
+  
+  <button type="submit">Add to Watchlist</button>
+</form>
+
+<form action="/user_movies" method="POST">
+  <input type="hidden" name="movie_id" value="<%= @movie['id'] %>">
+  <input type="hidden" name="status" value="watched">
+
+  <label>Rating:</label>
+  <input type="number" name="rating" min="1" max="10" required>
+
+  <button type="submit">Rate</button>
+</form>
+
+
+<p>Status: <%= @user_movie['status'] %></p>
+<p>Rating: <%= @user_movie['rating'] %></p>
+
+<% end %>
