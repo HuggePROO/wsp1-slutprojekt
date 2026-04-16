@@ -13,25 +13,3 @@
 <a href="../movies">
     <h3 id="whitetext">Back</h3>
 </a>
-
-(ska va i userpage.rb)
-<h3>Watched</h3>
-    <ul class="row" id="posterRow">
-      <% @watched.each do |movie| %>
-        <li>
-          <a href="/movies/<%= movie['id'] %>">
-            <img class="posterimg" src="<%= movie['poster'] %>" alt="<%= movie['name'] %>">
-          </a>
-        </li>
-      <% end %>
-    </ul>
-<h3>Watchlist</h3>
-    <ul class="row" id="posterRow">
-      <% @watched.each do |movie| %>
-        <li>
-          <a href="/movies/<%= movie['id'] %>">
-            <img class="posterimg" src="<%= movie['poster'] %>" alt="<%= movie['name'] %>">
-          </a>
-        </li>
-      <% end %>
-    </ul>

@@ -29,10 +29,13 @@ class App < Sinatra::Base
     end
   end
 
+  
+
   # Routen /
   get '/' do
     redirect(:"/movies")
   end
+
 
   get '/movies' do
     @movies = db.execute('SELECT * FROM movies')
@@ -41,6 +44,29 @@ class App < Sinatra::Base
     erb(:"movies/index")
   end
 
+  get '/movies/users/view' do
+    user_id = session[:user_id]
+    
+    # Watched movies
+    @watched = db.execute("
+      SELECT movies.*
+      FROM movies
+      JOIN user_movies ON movies.id = user_movies.movie_id
+      WHERE user_movies.user_id = ?
+      AND user_movies.status = 'watched'
+    ", user_id)
+
+    # Watchlist movies
+    @watchlist = db.execute("
+      SELECT movies.*
+      FROM movies
+      JOIN user_movies ON movies.id = user_movies.movie_id
+      WHERE user_movies.user_id = ?
+      AND user_movies.status = 'to-watch'
+    ", user_id)
+
+    erb :"/movies/users/show"
+  end
 
   get '/movies/new' do
     erb(:"movies/new")
@@ -56,14 +82,9 @@ class App < Sinatra::Base
   end
 
   get '/movies/:id' do | id |
-    @movie = db.execute('SELECT * FROM movies WHERE id=?',id).first
+    @movie = db.execute('SELECT * FROM movies WHERE id=?', id).first
+    @user_movie = db.execute("SELECT * FROM user_movies WHERE user_id = ? AND movie_id = ?", [session[:user_id], id]).first
     erb(:"movies/show")
-
-    # är lite fuckad
-    #  @user_movie = db.execute(
-    #"SELECT * FROM user_movies WHERE user_id = ? AND movie_id = ?",
-    #[session[:user_id], id]
-).first
   end
 
   post '/movies/:id/delete' do | id |
@@ -132,15 +153,11 @@ class App < Sinatra::Base
   end
 
   post '/users' do
-    username = params[:username]
-    password = params[:password]
-    password_hash = BCrypt::Password.create(password)
-    stored_password = BCrypt::Password.new(user["password"])
-    db.execute("INSERT INTO users (username, password) VALUES (?, ?)", [username, password_hash])
-    redirect '/login'
-    unless stored_password == request_plain_password
-      redirect '/acces_denied'
-    end
+  username = params[:username]
+  password = params[:password]
+  password_hash = BCrypt::Password.create(password)
+  db.execute("INSERT INTO users (username, password) VALUES (?, ?)", [username, password_hash])
+  redirect '/login'
   end
 
 
@@ -156,31 +173,15 @@ class App < Sinatra::Base
     redirect "/movies/#{movie_id}"
   end
 
-  get '/movies/users/view' do
-    user_id = session[:user_id]
-    
-    # Watched movies
-    @watched = db.execute("
-      SELECT movies.*
-      FROM movies
-      JOIN user_movies ON movies.id = user_movies.movie_id
-      WHERE user_movies.user_id = ?
-      AND user_movies.status = 'watched'
-    ", user_id)
+  post '/user_movies/:movie_id/delete' do |movie_id|
+  db.execute("DELETE FROM user_movies WHERE user_id = ? AND movie_id = ?", [session[:user_id], movie_id])
+  redirect "/movies/#{movie_id}"
+  end
 
-    # Watchlist movies
-    @watchlist = db.execute("
-      SELECT movies.*
-      FROM movies
-      JOIN user_movies ON movies.id = user_movies.movie_id
-      WHERE user_movies.user_id = ?
-      AND user_movies.status = 'to-watch'
-    ", user_id)
-
-    erb :"/movies/users/show"
+  post '/user_movies/:movie_id/update' do |movie_id|
+  rating = params[:rating]
+  db.execute("UPDATE user_movies SET status = 'watched', rating = ? WHERE user_id = ? AND movie_id = ?", [rating, session[:user_id], movie_id])
+  redirect "/movies/#{movie_id}"
   end
 
 end
-
-
-# kolla line 62

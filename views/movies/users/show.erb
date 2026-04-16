@@ -1,11 +1,51 @@
+<link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
+
 <h2>My Profile</h2>    
+
+<h3>Watchlist</h3>
+<div class="container">
+    <button class="scroll-btn scroll-left" onclick="scrollPosters('watchlist', -1)">&#10094;</button>
+    <ul class="row" id="watchlist">
+      <% @watchlist.each do |movie| %>
+        <li>
+          <a href="/movies/<%= movie['id'] %>">
+            <img class="posterimg" src="<%= movie['poster'] %>" alt="<%= movie['name'] %>">
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    <button class="scroll-btn scroll-right" onclick="scrollPosters('watchlist', 1)">&#10095;</button>
+</div>
+
+<h3>Watched</h3>
+<div class="container">
+    <button class="scroll-btn scroll-left" onclick="scrollPosters('watched', -1)">&#10094;</button>
+    <ul class="row" id="watched">
+      <% @watched.each do |movie| %>
+        <li>
+          <a href="/movies/<%= movie['id'] %>">
+            <img class="posterimg" src="<%= movie['poster'] %>" alt="<%= movie['name'] %>">
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    <button class="scroll-btn scroll-right" onclick="scrollPosters('watched', 1)">&#10095;</button>
+</div>
+
+<a href="/movies">
+    <h3 id="whitetext">Back</h3>
+</a>
+
 
 <form class="delete" action="/logout" method="post">
     <input type="submit" value="Log Out">
 </form>
 
 
-<a href="../movies">
-    <h3 id="whitetext">Back</h3>
-</a>
-
+<script>
+  function scrollPosters(id, direction) {
+    const row = document.getElementById(id);
+    const scrollAmount = 300 * direction;
+    row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+</script>
