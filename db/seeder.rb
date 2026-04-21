@@ -38,13 +38,15 @@ class Seeder
 
     db.execute('CREATE TABLE user_movies (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER,
-      movie_id INTEGER,
-      status TEXT NOT NULL,
-      rating INTEGER,
-      FOREIGN KEY (user_id) REFERENCES users(id),
-      FOREIGN KEY (movie_id) REFERENCES movies(id)
+      user_id INTEGER NOT NULL,
+      movie_id INTEGER NOT NULL,
+      status  TEXT,
+      rating  INTEGER,
+      FOREIGN KEY (user_id)  REFERENCES users(id)  ON DELETE CASCADE,
+      FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
     )')
+
+    
   end
 
   def self.populate_tables
